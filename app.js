@@ -86,7 +86,7 @@
         },
         featuredManuscript: {
             filename: 'manuscript.docx',
-            displayName: 'The Manuscript',
+            displayName: 'Origin Protocol (WIP Draft)',
             author: 'jmbradley'
         }
     };
