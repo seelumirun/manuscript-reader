@@ -99,6 +99,7 @@
         featuredBtn: document.getElementById('featured-manuscript-btn'),
         featuredName: document.getElementById('featured-name'),
         featuredAuthor: document.getElementById('featured-author'),
+        featuredDate: document.getElementById('featured-date'),
         docTitle: document.getElementById('doc-title'),
         readerContent: document.getElementById('reader-content'),
         readerHeader: document.querySelector('.reader-header'),
@@ -181,6 +182,18 @@
                 // Update button text with config values
                 elements.featuredName.textContent = CONFIG.featuredManuscript.displayName;
                 elements.featuredAuthor.textContent = CONFIG.featuredManuscript.author;
+
+                // Get last modified date
+                const lastModified = response.headers.get('Last-Modified');
+                if (lastModified) {
+                    const date = new Date(lastModified);
+                    elements.featuredDate.textContent = date.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    });
+                }
+
                 elements.featuredBtn.style.display = 'flex';
             }
         } catch (error) {
