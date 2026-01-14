@@ -188,6 +188,11 @@ body {
     color: var(--text-muted);
 }
 
+.featured-date-highlight {
+    color: var(--accent);
+    font-weight: 500;
+}
+
 /* Divider */
 .divider {
     display: flex;
