@@ -132,7 +132,7 @@
         applyTheme(state.theme);
         applyFontSize(state.fontSize);
 
-        // Initialize IndexedDB and check for saved document (async, non-blocking)
+        // Initialize IndexedDB and check for saved document or load default
         initDB()
             .then(() => loadDocumentFromDB())
             .then(async (savedDoc) => {
@@ -151,15 +151,45 @@
                     } catch (error) {
                         console.error('Error restoring document:', error);
                         state.currentDocument = null;
-                        showScreen('upload');
+                        // Try loading default manuscript
+                        await tryLoadDefaultManuscript();
                     } finally {
                         showLoading(false);
                     }
+                } else {
+                    // No saved document, try loading default manuscript
+                    await tryLoadDefaultManuscript();
                 }
             })
-            .catch((error) => {
+            .catch(async (error) => {
                 console.error('Error with IndexedDB:', error);
+                // Try loading default manuscript anyway
+                await tryLoadDefaultManuscript();
             });
+    }
+
+    // Try to load the default manuscript file
+    async function tryLoadDefaultManuscript() {
+        try {
+            showLoading(true);
+            const response = await fetch('manuscript.docx');
+            if (response.ok) {
+                const arrayBuffer = await response.arrayBuffer();
+                state.currentDocument = {
+                    name: 'Manuscript',
+                    arrayBuffer: arrayBuffer
+                };
+                await displayDocument();
+                showScreen('reader');
+            } else {
+                showScreen('upload');
+            }
+        } catch (error) {
+            console.log('No default manuscript found, showing upload screen');
+            showScreen('upload');
+        } finally {
+            showLoading(false);
+        }
     }
 
     // Load saved settings
