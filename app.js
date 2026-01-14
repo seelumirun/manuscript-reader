@@ -96,11 +96,7 @@
     const elements = {
         uploadScreen: document.getElementById('upload-screen'),
         readerScreen: document.getElementById('reader-screen'),
-        fileInput: document.getElementById('file-input'),
         featuredBtn: document.getElementById('featured-manuscript-btn'),
-        featuredName: document.getElementById('featured-name'),
-        featuredSubtitle: document.getElementById('featured-subtitle'),
-        featuredAuthor: document.getElementById('featured-author'),
         featuredDate: document.getElementById('featured-date'),
         docTitle: document.getElementById('doc-title'),
         readerContent: document.getElementById('reader-content'),
@@ -176,28 +172,20 @@
             });
     }
 
-    // Check if featured manuscript exists and show button
+    // Check if featured manuscript exists and get last updated date
     async function checkFeaturedManuscript() {
         try {
             const response = await fetch(CONFIG.featuredManuscript.filename, { method: 'HEAD' });
             if (response.ok) {
-                // Update button text with config values
-                elements.featuredName.textContent = CONFIG.featuredManuscript.displayName;
-                elements.featuredSubtitle.textContent = CONFIG.featuredManuscript.subtitle || '';
-                elements.featuredAuthor.textContent = CONFIG.featuredManuscript.author;
-
                 // Get last modified date and show relative time
                 const lastModified = response.headers.get('Last-Modified');
                 if (lastModified) {
                     const date = new Date(lastModified);
                     elements.featuredDate.textContent = getRelativeTime(date);
                 }
-
-                elements.featuredBtn.style.display = 'flex';
             }
         } catch (error) {
-            // Featured manuscript not available, button stays hidden
-            console.log('No featured manuscript available');
+            console.log('Could not get manuscript info');
         }
     }
 
@@ -250,10 +238,7 @@
 
     // Bind all event listeners
     function bindEvents() {
-        // File upload
-        elements.fileInput.addEventListener('change', handleFileUpload);
-
-        // Featured manuscript button
+        // Read Now button
         elements.featuredBtn.addEventListener('click', loadFeaturedManuscript);
 
         // Navigation

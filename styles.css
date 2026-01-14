@@ -159,86 +159,38 @@ body {
     color: var(--text-muted);
 }
 
-/* Featured Manuscript Button */
-.featured-manuscript-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    background: var(--bg-elevated);
-    border: 2px solid var(--border);
-    padding: 24px 32px;
-    border-radius: 16px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    width: 100%;
-    color: var(--text-primary);
-}
-
-.featured-manuscript-btn:hover {
-    border-color: var(--accent);
-    background: var(--highlight);
-}
-
-.featured-manuscript-btn svg {
-    color: var(--accent);
-}
-
-.featured-title {
-    font-size: 18px;
-    font-weight: 600;
-}
-
-.featured-subtitle {
+/* Last updated text */
+.last-updated {
     font-size: 14px;
-    color: var(--text-secondary);
-    margin-top: -4px;
-}
-
-.featured-author {
-    font-size: 13px;
     color: var(--text-muted);
+    margin-bottom: 32px;
 }
 
-.featured-date-highlight {
+.last-updated span {
     color: var(--accent);
     font-weight: 500;
 }
 
-/* Divider */
-.divider {
-    display: flex;
-    align-items: center;
-    margin: 24px 0;
-    width: 100%;
+/* Read Now button */
+.read-now-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 16px 48px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.divider::before,
-.divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
+.read-now-btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
 }
 
-.divider span {
-    padding: 0 16px;
-    font-size: 13px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* Secondary upload button */
-.upload-btn-secondary {
-    background: transparent;
-    border: 2px solid var(--border);
-    color: var(--text-primary);
-}
-
-.upload-btn-secondary:hover {
-    border-color: var(--accent);
-    background: var(--highlight);
+.read-now-btn:active {
+    transform: translateY(0);
 }
 
 /* Reader Screen */
