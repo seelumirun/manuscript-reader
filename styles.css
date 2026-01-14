@@ -177,6 +177,12 @@ body {
     font-weight: 600;
 }
 
+.featured-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: -4px;
+}
+
 .featured-author {
     font-size: 13px;
     color: var(--text-muted);

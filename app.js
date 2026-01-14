@@ -86,7 +86,8 @@
         },
         featuredManuscript: {
             filename: 'manuscript.docx',
-            displayName: 'Origin Protocol (WIP Draft)',
+            displayName: 'Origin Protocol',
+            subtitle: '(WIP Draft)',
             author: 'jmbradley'
         }
     };
@@ -98,6 +99,7 @@
         fileInput: document.getElementById('file-input'),
         featuredBtn: document.getElementById('featured-manuscript-btn'),
         featuredName: document.getElementById('featured-name'),
+        featuredSubtitle: document.getElementById('featured-subtitle'),
         featuredAuthor: document.getElementById('featured-author'),
         featuredDate: document.getElementById('featured-date'),
         docTitle: document.getElementById('doc-title'),
@@ -181,6 +183,7 @@
             if (response.ok) {
                 // Update button text with config values
                 elements.featuredName.textContent = CONFIG.featuredManuscript.displayName;
+                elements.featuredSubtitle.textContent = CONFIG.featuredManuscript.subtitle || '';
                 elements.featuredAuthor.textContent = CONFIG.featuredManuscript.author;
 
                 // Get last modified date and show relative time
