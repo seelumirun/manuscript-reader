@@ -83,6 +83,11 @@
             serviceId: 'service_43jb6qi',
             templateId: 'template_hg798mf',
             publicKey: 'spdM7Hl7V-jXXbAMn'
+        },
+        featuredManuscript: {
+            filename: 'manuscript.docx',
+            displayName: 'The Manuscript',
+            author: 'jmbradley'
         }
     };
 
@@ -91,6 +96,9 @@
         uploadScreen: document.getElementById('upload-screen'),
         readerScreen: document.getElementById('reader-screen'),
         fileInput: document.getElementById('file-input'),
+        featuredBtn: document.getElementById('featured-manuscript-btn'),
+        featuredName: document.getElementById('featured-name'),
+        featuredAuthor: document.getElementById('featured-author'),
         docTitle: document.getElementById('doc-title'),
         readerContent: document.getElementById('reader-content'),
         readerHeader: document.querySelector('.reader-header'),
@@ -132,7 +140,10 @@
         applyTheme(state.theme);
         applyFontSize(state.fontSize);
 
-        // Initialize IndexedDB and check for saved document or load default
+        // Check if featured manuscript exists and show button
+        checkFeaturedManuscript();
+
+        // Initialize IndexedDB and check for saved document
         initDB()
             .then(() => loadDocumentFromDB())
             .then(async (savedDoc) => {
@@ -151,42 +162,60 @@
                     } catch (error) {
                         console.error('Error restoring document:', error);
                         state.currentDocument = null;
-                        // Try loading default manuscript
-                        await tryLoadDefaultManuscript();
+                        showScreen('upload');
                     } finally {
                         showLoading(false);
                     }
-                } else {
-                    // No saved document, try loading default manuscript
-                    await tryLoadDefaultManuscript();
                 }
             })
-            .catch(async (error) => {
+            .catch((error) => {
                 console.error('Error with IndexedDB:', error);
-                // Try loading default manuscript anyway
-                await tryLoadDefaultManuscript();
             });
     }
 
-    // Try to load the default manuscript file
-    async function tryLoadDefaultManuscript() {
+    // Check if featured manuscript exists and show button
+    async function checkFeaturedManuscript() {
+        try {
+            const response = await fetch(CONFIG.featuredManuscript.filename, { method: 'HEAD' });
+            if (response.ok) {
+                // Update button text with config values
+                elements.featuredName.textContent = CONFIG.featuredManuscript.displayName;
+                elements.featuredAuthor.textContent = CONFIG.featuredManuscript.author;
+                elements.featuredBtn.style.display = 'flex';
+            }
+        } catch (error) {
+            // Featured manuscript not available, button stays hidden
+            console.log('No featured manuscript available');
+        }
+    }
+
+    // Load the featured manuscript
+    async function loadFeaturedManuscript() {
         try {
             showLoading(true);
-            const response = await fetch('manuscript.docx');
+            const response = await fetch(CONFIG.featuredManuscript.filename);
             if (response.ok) {
                 const arrayBuffer = await response.arrayBuffer();
                 state.currentDocument = {
-                    name: 'Manuscript',
+                    name: CONFIG.featuredManuscript.displayName,
                     arrayBuffer: arrayBuffer
                 };
+
+                // Save to IndexedDB
+                try {
+                    await saveDocumentToDB(state.currentDocument.name, arrayBuffer);
+                } catch (e) {
+                    console.error('Failed to save document to DB:', e);
+                }
+
                 await displayDocument();
                 showScreen('reader');
             } else {
-                showScreen('upload');
+                showToast('Failed to load manuscript', 'error');
             }
         } catch (error) {
-            console.log('No default manuscript found, showing upload screen');
-            showScreen('upload');
+            console.error('Error loading featured manuscript:', error);
+            showToast('Failed to load manuscript', 'error');
         } finally {
             showLoading(false);
         }
@@ -211,6 +240,9 @@
     function bindEvents() {
         // File upload
         elements.fileInput.addEventListener('change', handleFileUpload);
+
+        // Featured manuscript button
+        elements.featuredBtn.addEventListener('click', loadFeaturedManuscript);
 
         // Navigation
         elements.backBtn.addEventListener('click', goBack);

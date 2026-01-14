@@ -41,17 +41,29 @@
                 </svg>
             </div>
             <h1>Manuscript Reader</h1>
-            <p class="subtitle">Upload your manuscript to begin reading</p>
-            <label class="upload-btn" for="file-input">
+            <p class="subtitle">Select a manuscript to begin reading</p>
+
+            <!-- Featured Manuscript -->
+            <button id="featured-manuscript-btn" class="featured-manuscript-btn" style="display: none;">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+                <span class="featured-title">Read <span id="featured-name">Manuscript</span></span>
+                <span class="featured-author">shared by <span id="featured-author">jmbradley</span></span>
+            </button>
+
+            <div class="divider"><span>or</span></div>
+
+            <label class="upload-btn upload-btn-secondary" for="file-input">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                     <polyline points="17 8 12 3 7 8"></polyline>
                     <line x1="12" y1="3" x2="12" y2="15"></line>
                 </svg>
-                Choose .docx File
+                Upload your own .docx
             </label>
             <input type="file" id="file-input" accept=".docx" hidden>
-            <p class="file-hint">Supports Microsoft Word documents</p>
         </div>
     </div>
 

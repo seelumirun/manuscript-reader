@@ -147,6 +147,77 @@ body {
     color: var(--text-muted);
 }
 
+/* Featured Manuscript Button */
+.featured-manuscript-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-elevated);
+    border: 2px solid var(--border);
+    padding: 24px 32px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    color: var(--text-primary);
+}
+
+.featured-manuscript-btn:hover {
+    border-color: var(--accent);
+    background: var(--highlight);
+}
+
+.featured-manuscript-btn svg {
+    color: var(--accent);
+}
+
+.featured-title {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.featured-author {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* Divider */
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 24px 0;
+    width: 100%;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+.divider span {
+    padding: 0 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Secondary upload button */
+.upload-btn-secondary {
+    background: transparent;
+    border: 2px solid var(--border);
+    color: var(--text-primary);
+}
+
+.upload-btn-secondary:hover {
+    border-color: var(--accent);
+    background: var(--highlight);
+}
+
 /* Reader Screen */
 #reader-screen {
     background: var(--reader-bg);
