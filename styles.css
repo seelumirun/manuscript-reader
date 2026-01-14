@@ -370,8 +370,18 @@ body {
     text-align: right;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-bottom: 0.1em;
+    margin-bottom: 1.5em;
     color: var(--text-secondary);
+}
+
+/* Tight spacing between consecutive settings */
+.manuscript-content .scene-setting + .scene-setting {
+    margin-top: -1.3em;
+}
+
+/* Reduce space when setting is followed by POV marker */
+.manuscript-content .scene-setting + .pov-label {
+    margin-top: 0.5em;
 }
 
 /* POV labels */
@@ -386,6 +396,13 @@ body {
     color: var(--text-primary);
     text-align: left;
     -webkit-text-stroke: 1px var(--text-primary);
+}
+
+/* Scene breaks */
+.manuscript-content .scene-break {
+    text-align: right;
+    margin: 2em 0;
+    color: var(--text-secondary);
 }
 
 /* Simplified paragraph styles for performance */

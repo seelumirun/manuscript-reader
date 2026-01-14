@@ -450,9 +450,10 @@
                 p.classList.add('pov-label');
             }
 
-            // Scene breaks - very short lines like "***" or "* * *" or "---"
+            // Scene breaks - very short lines like "***" or "* * *" or "---" or "⌇║⌇║⌇"
             else if (/^[\*\-#~=\s]{1,10}$/.test(text) ||
-                     /^•••$/.test(text)) {
+                     /^•••$/.test(text) ||
+                     /^[⌇║]+$/.test(text)) {
                 p.classList.add('scene-break');
             }
         });
