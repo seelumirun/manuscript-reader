@@ -17,15 +17,14 @@
     --reader-scale: 1;
 }
 
-[data-theme="sepia"] {
+/* Reader theme variations - only apply to reader screen */
+[data-theme="sepia"] #reader-screen {
     --bg-primary: #f4ecd8;
     --bg-secondary: #e8dcc4;
     --bg-elevated: #efe5d0;
     --text-primary: #433422;
     --text-secondary: #6b5a45;
     --text-muted: #8a7a65;
-    --accent: #8b6914;
-    --accent-hover: #7a5c12;
     --border: #d4c4a8;
     --shadow: rgba(67, 52, 34, 0.15);
     --reader-bg: #f9f3e3;
@@ -34,15 +33,13 @@
     --highlight-border: rgba(139, 105, 20, 0.4);
 }
 
-[data-theme="light"] {
+[data-theme="light"] #reader-screen {
     --bg-primary: #ffffff;
     --bg-secondary: #f5f5f5;
     --bg-elevated: #fafafa;
     --text-primary: #1a1a1a;
     --text-secondary: #555;
     --text-muted: #888;
-    --accent: #0066cc;
-    --accent-hover: #0055aa;
     --border: #ddd;
     --shadow: rgba(0, 0, 0, 0.1);
     --reader-bg: #ffffff;
