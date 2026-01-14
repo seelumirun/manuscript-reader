@@ -92,6 +92,18 @@ body {
     align-items: center;
     padding: 24px;
     background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    position: relative;
+}
+
+#upload-screen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('cover-bg.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.1;
+    pointer-events: none;
 }
 
 .upload-container {
