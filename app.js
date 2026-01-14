@@ -98,7 +98,8 @@
         readerScreen: document.getElementById('reader-screen'),
         featuredBtn: document.getElementById('featured-manuscript-btn'),
         featuredDate: document.getElementById('featured-date'),
-        docTitle: document.getElementById('doc-title'),
+        headerProgressBar: document.getElementById('header-progress-bar'),
+        headerProgressText: document.getElementById('header-progress-text'),
         readerContent: document.getElementById('reader-content'),
         readerHeader: document.querySelector('.reader-header'),
         backBtn: document.getElementById('back-btn'),
@@ -366,7 +367,6 @@
     async function displayDocument() {
         if (!state.currentDocument) return;
 
-        elements.docTitle.textContent = state.currentDocument.name;
         elements.readerContent.innerHTML = '';
 
         // Use mammoth to convert docx to clean HTML
@@ -780,9 +780,11 @@
 
         const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
 
-        // Update progress bar
+        // Update progress bars (header and footer)
         elements.progressBar.style.width = `${progress}%`;
         elements.progressText.textContent = `${Math.round(progress)}%`;
+        elements.headerProgressBar.style.setProperty('--progress', `${progress}%`);
+        elements.headerProgressText.textContent = `${Math.round(progress)}%`;
 
         // Hide/show header based on scroll direction
         const scrollDelta = scrollTop - state.lastScrollTop;
@@ -846,9 +848,11 @@
                         if (scrollHeight > 0) {
                             const targetScroll = (progress / 100) * scrollHeight;
                             window.scrollTo(0, targetScroll);
-                            // Update progress bar
+                            // Update progress bars
                             elements.progressBar.style.width = `${progress}%`;
                             elements.progressText.textContent = `${Math.round(progress)}%`;
+                            elements.headerProgressBar.style.setProperty('--progress', `${progress}%`);
+                            elements.headerProgressText.textContent = `${Math.round(progress)}%`;
                         }
                     }, 500);
                 }

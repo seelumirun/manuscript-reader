@@ -237,14 +237,41 @@ body {
     background: var(--bg-elevated);
 }
 
-.reader-header h2 {
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--text-primary);
+/* Header Progress Bar */
+.header-progress {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
     max-width: 200px;
+    margin: 0 16px;
+}
+
+.header-progress-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--bg-elevated);
+    border-radius: 2px;
+    position: relative;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+}
+
+.header-progress-bar::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: var(--progress, 0%);
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.header-progress-text {
+    font-size: 12px;
+    color: var(--text-muted);
+    min-width: 32px;
 }
 
 /* Reader Content */
