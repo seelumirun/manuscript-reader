@@ -106,6 +106,7 @@
         settingsBtn: document.getElementById('settings-btn'),
         settingsPanel: document.getElementById('settings-panel'),
         closeSettings: document.getElementById('close-settings'),
+        tocList: document.getElementById('toc-list'),
         commentModal: document.getElementById('comment-modal'),
         closeModal: document.getElementById('close-modal'),
         cancelComment: document.getElementById('cancel-comment'),
@@ -396,6 +397,9 @@
         // Post-process to detect and style special elements
         detectAndStyleSpecialParagraphs(wrapper);
 
+        // Build table of contents from chapters
+        buildTableOfContents(wrapper);
+
         // Make paragraphs clickable for comments
         setupParagraphClickHandlers();
 
@@ -453,6 +457,35 @@
                      /^[⌇║]+$/.test(text)) {
                 p.classList.add('scene-break');
             }
+        });
+    }
+
+    // Build table of contents from chapter markers
+    function buildTableOfContents(wrapper) {
+        const chapters = wrapper.querySelectorAll('.chapter-number');
+        elements.tocList.innerHTML = '';
+
+        if (chapters.length === 0) {
+            elements.tocList.innerHTML = '<p class="toc-empty">No chapters found</p>';
+            return;
+        }
+
+        chapters.forEach((chapter, index) => {
+            // Give each chapter an ID for navigation
+            const chapterId = `chapter-${index}`;
+            chapter.id = chapterId;
+
+            const tocItem = document.createElement('button');
+            tocItem.className = 'toc-item';
+            tocItem.textContent = `Chapter ${chapter.textContent.trim()}`;
+            tocItem.addEventListener('click', () => {
+                // Scroll to chapter
+                chapter.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // Close settings panel
+                closeSettings();
+            });
+
+            elements.tocList.appendChild(tocItem);
         });
     }
 
