@@ -93,6 +93,8 @@ body {
     padding: 24px;
     background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
     position: relative;
+    min-height: 100vh;
+    min-height: 100dvh;
 }
 
 #upload-screen::before {
@@ -104,9 +106,12 @@ body {
     background-position: center;
     opacity: 0.1;
     pointer-events: none;
+    z-index: 0;
 }
 
 .upload-container {
+    position: relative;
+    z-index: 1;
     text-align: center;
     max-width: 320px;
 }
