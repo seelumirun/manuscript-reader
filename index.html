@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Manuscript Reader</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style id="docx-override">
+        /* Override docx-preview backgrounds */
+        .docx-wrapper-wrapper,
+        .docx-wrapper,
+        .docx-wrapper > *,
+        .docx-wrapper section,
+        .docx-wrapper article,
+        section.docx,
+        article.docx,
+        .docx {
+            background: transparent !important;
+            background-color: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Upload Screen -->
+    <div id="upload-screen" class="screen active">
+        <div class="upload-container">
+            <div class="logo">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    <line x1="8" y1="7" x2="16" y2="7"></line>
+                    <line x1="8" y1="11" x2="16" y2="11"></line>
+                    <line x1="8" y1="15" x2="12" y2="15"></line>
+                </svg>
+            </div>
+            <h1>Manuscript Reader</h1>
+            <p class="subtitle">Upload your manuscript to begin reading</p>
+            <label class="upload-btn" for="file-input">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                Choose .docx File
+            </label>
+            <input type="file" id="file-input" accept=".docx" hidden>
+            <p class="file-hint">Supports Microsoft Word documents</p>
+        </div>
+    </div>
+
+    <!-- Reader Screen -->
+    <div id="reader-screen" class="screen">
+        <header class="reader-header">
+            <button id="back-btn" class="header-btn" aria-label="Back">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <h2 id="doc-title">Untitled</h2>
+            <button id="settings-btn" class="header-btn" aria-label="Settings">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="1"></circle>
+                    <circle cx="12" cy="5" r="1"></circle>
+                    <circle cx="12" cy="19" r="1"></circle>
+                </svg>
+            </button>
+        </header>
+
+        <main id="reader-content" class="reader-content">
+            <!-- Parsed document content goes here -->
+        </main>
+
+        <footer class="reader-footer">
+            <div class="progress-container">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+            <span id="progress-text" class="progress-text">0%</span>
+        </footer>
+    </div>
+
+    <!-- Comment Modal -->
+    <div id="comment-modal" class="modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Comment</h3>
+                <button id="close-modal" class="close-btn" aria-label="Close">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="context-preview">
+                    <label>Selected passage:</label>
+                    <blockquote id="selected-text"></blockquote>
+                </div>
+                <div class="comment-input-group">
+                    <label for="comment-text">Your comment:</label>
+                    <textarea id="comment-text" placeholder="Share your thoughts on this passage..." rows="4"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-comment" class="btn btn-secondary">Cancel</button>
+                <button id="submit-comment" class="btn btn-primary">Send Comment</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div id="settings-panel" class="settings-panel">
+        <div class="settings-header">
+            <h3>Display Settings</h3>
+            <button id="close-settings" class="close-btn" aria-label="Close">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="settings-body">
+            <div class="setting-group">
+                <label>Font Size</label>
+                <div class="font-size-controls">
+                    <button id="font-decrease" class="size-btn">A-</button>
+                    <span id="font-size-display">18px</span>
+                    <button id="font-increase" class="size-btn">A+</button>
+                </div>
+            </div>
+            <div class="setting-group">
+                <label>Theme</label>
+                <div class="theme-options">
+                    <button class="theme-btn" data-theme="dark" aria-label="Dark theme">
+                        <span class="theme-preview dark"></span>
+                    </button>
+                    <button class="theme-btn" data-theme="sepia" aria-label="Sepia theme">
+                        <span class="theme-preview sepia"></span>
+                    </button>
+                    <button class="theme-btn" data-theme="light" aria-label="Light theme">
+                        <span class="theme-preview light"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <p>Processing document...</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

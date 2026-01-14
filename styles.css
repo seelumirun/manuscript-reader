@@ -1,0 +1,951 @@
+/* CSS Variables for Theming */
+:root {
+    --bg-primary: #121212;
+    --bg-secondary: #1e1e1e;
+    --bg-elevated: #2a2a2a;
+    --text-primary: #e4e4e4;
+    --text-secondary: #a0a0a0;
+    --text-muted: #666;
+    --accent: #6b9fff;
+    --accent-hover: #5a8af0;
+    --border: #333;
+    --shadow: rgba(0, 0, 0, 0.4);
+    --reader-bg: #1a1a1a;
+    --reader-text: #d4d4d4;
+    --highlight: rgba(107, 159, 255, 0.15);
+    --highlight-border: rgba(107, 159, 255, 0.4);
+    --reader-scale: 1;
+}
+
+[data-theme="sepia"] {
+    --bg-primary: #f4ecd8;
+    --bg-secondary: #e8dcc4;
+    --bg-elevated: #efe5d0;
+    --text-primary: #433422;
+    --text-secondary: #6b5a45;
+    --text-muted: #8a7a65;
+    --accent: #8b6914;
+    --accent-hover: #7a5c12;
+    --border: #d4c4a8;
+    --shadow: rgba(67, 52, 34, 0.15);
+    --reader-bg: #f9f3e3;
+    --reader-text: #433422;
+    --highlight: rgba(139, 105, 20, 0.15);
+    --highlight-border: rgba(139, 105, 20, 0.4);
+}
+
+[data-theme="light"] {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f5f5;
+    --bg-elevated: #fafafa;
+    --text-primary: #1a1a1a;
+    --text-secondary: #555;
+    --text-muted: #888;
+    --accent: #0066cc;
+    --accent-hover: #0055aa;
+    --border: #ddd;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --reader-bg: #ffffff;
+    --reader-text: #2a2a2a;
+    --highlight: rgba(0, 102, 204, 0.1);
+    --highlight-border: rgba(0, 102, 204, 0.3);
+}
+
+/* Reset & Base */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    overflow-x: hidden;
+    line-height: 1.5;
+}
+
+/* Screen Management */
+.screen {
+    display: none;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+}
+
+.screen.active {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Upload Screen */
+#upload-screen {
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+}
+
+.upload-container {
+    text-align: center;
+    max-width: 320px;
+}
+
+.logo {
+    color: var(--accent);
+    margin-bottom: 24px;
+}
+
+.upload-container h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+    font-size: 15px;
+}
+
+.upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #fff;
+    padding: 16px 28px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.upload-btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+}
+
+.upload-btn:active {
+    transform: translateY(0);
+}
+
+.file-hint {
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* Reader Screen */
+#reader-screen {
+    background: var(--reader-bg);
+}
+
+.reader-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+}
+
+.reader-header.hidden {
+    transform: translateY(-100%);
+}
+
+.header-btn {
+    background: none;
+    position: relative;
+    z-index: 101;
+    border: none;
+    color: var(--accent);
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.header-btn:hover {
+    background: var(--bg-elevated);
+}
+
+.reader-header h2 {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary);
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Reader Content */
+.reader-content {
+    flex: 1;
+    padding: 32px 24px;
+    padding-top: 70px; /* Space for fixed header */
+    max-width: 680px;
+    margin: 0 auto;
+    width: 100%;
+    font-family: 'Merriweather', Georgia, serif;
+    font-size: var(--reader-font-size, 18px);
+    line-height: 1.8;
+    color: var(--reader-text);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile padding and performance */
+@media (max-width: 480px) {
+    .reader-content {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .docx-wrapper,
+    .docx-wrapper-wrapper {
+        padding: 0 4px;
+    }
+
+    /* Performance optimizations for mobile */
+    .docx-wrapper {
+        contain: content;
+        will-change: transform;
+    }
+
+    .docx-wrapper * {
+        /* Disable pointer events on individual elements for faster scrolling */
+        /* Long-press still works via touch events */
+    }
+}
+
+/* Mammoth content styling */
+.manuscript-content {
+    color: var(--reader-text);
+}
+
+.manuscript-content p {
+    margin-bottom: 1em;
+    line-height: 1.7;
+}
+
+.manuscript-content h1,
+.manuscript-content h2,
+.manuscript-content h3 {
+    color: var(--text-primary);
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+    line-height: 1.3;
+}
+
+.manuscript-content h1 {
+    font-size: 1.8em;
+    font-weight: 700;
+}
+
+.manuscript-content h2 {
+    font-size: 1.4em;
+    font-weight: 600;
+}
+
+.manuscript-content h3 {
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+/* Font size scaling for mammoth content */
+.manuscript-content {
+    font-size: var(--reader-font-size, 18px);
+}
+
+/* Chapter numbers */
+.manuscript-content .chapter-number {
+    font-size: 2em;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+    color: var(--text-primary);
+}
+
+/* Scene settings (time/place) */
+.manuscript-content .scene-setting {
+    font-style: italic;
+    text-align: center;
+    margin-bottom: 1.5em;
+    color: var(--text-secondary);
+}
+
+/* POV labels */
+.manuscript-content .pov-label {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    letter-spacing: 0.05em;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    color: var(--text-secondary);
+}
+
+/* Simplified paragraph styles for performance */
+.manuscript-content p {
+    padding: 2px 0;
+}
+
+/* Hover only on desktop */
+@media (hover: hover) {
+    .manuscript-content p:hover {
+        background: var(--highlight);
+    }
+}
+
+.reader-content p:active {
+    background: var(--highlight);
+    border-color: var(--highlight-border);
+}
+
+.reader-content p.has-comment {
+    border-left: 3px solid var(--accent);
+    background: var(--highlight);
+}
+
+.reader-content h1,
+.reader-content h2,
+.reader-content h3 {
+    font-family: 'Inter', -apple-system, sans-serif;
+    margin-top: 2em;
+    margin-bottom: 0.8em;
+    line-height: 1.3;
+    color: var(--text-primary);
+}
+
+.reader-content h1 {
+    font-size: 1.8em;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5em;
+}
+
+.reader-content h2 {
+    font-size: 1.4em;
+    font-weight: 600;
+}
+
+.reader-content h3 {
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.reader-content blockquote {
+    margin: 1.5em 0;
+    padding: 16px 20px;
+    border-left: 3px solid var(--accent);
+    background: var(--bg-elevated);
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+}
+
+.reader-content ul,
+.reader-content ol {
+    margin: 1em 0;
+    padding-left: 1.5em;
+}
+
+.reader-content li {
+    margin-bottom: 0.5em;
+}
+
+/* Reader Footer */
+.reader-footer {
+    padding: 12px 20px;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.progress-container {
+    flex: 1;
+    height: 4px;
+    background: var(--bg-elevated);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 12px;
+    color: var(--text-muted);
+    min-width: 36px;
+    text-align: right;
+}
+
+/* Comment Modal */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+}
+
+.modal.active {
+    display: block;
+}
+
+.modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--bg-secondary);
+    border-radius: 20px 20px 0 0;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.modal-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    padding: 4px;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.close-btn:hover {
+    color: var(--text-primary);
+    background: var(--bg-elevated);
+}
+
+.modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.context-preview {
+    margin-bottom: 20px;
+}
+
+.context-preview label {
+    display: block;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.context-preview blockquote {
+    background: var(--bg-elevated);
+    padding: 16px;
+    border-radius: 8px;
+    font-family: 'Merriweather', Georgia, serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    border-left: 3px solid var(--accent);
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+.comment-input-group label {
+    display: block;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.comment-input-group textarea {
+    width: 100%;
+    background: var(--bg-elevated);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: var(--text-primary);
+    resize: none;
+    transition: border-color 0.2s;
+}
+
+.comment-input-group textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.comment-input-group textarea::placeholder {
+    color: var(--text-muted);
+}
+
+.modal-footer {
+    padding: 16px 20px;
+    display: flex;
+    gap: 12px;
+    border-top: 1px solid var(--border);
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+}
+
+.btn {
+    flex: 1;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.btn-secondary {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+    background: var(--border);
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: var(--accent-hover);
+}
+
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Settings Panel */
+.settings-panel {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    max-width: 320px;
+    height: 100%;
+    background: var(--bg-secondary);
+    z-index: 2000;
+    transition: right 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -4px 0 20px var(--shadow);
+}
+
+.settings-panel.active {
+    right: 0;
+}
+
+.settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.settings-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.settings-body {
+    padding: 20px;
+    flex: 1;
+}
+
+.setting-group {
+    margin-bottom: 28px;
+}
+
+.setting-group label {
+    display: block;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.font-size-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.size-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.size-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+#font-size-display {
+    font-size: 16px;
+    color: var(--text-primary);
+    min-width: 50px;
+    text-align: center;
+}
+
+.theme-options {
+    display: flex;
+    gap: 12px;
+}
+
+.theme-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    cursor: pointer;
+    padding: 4px;
+    background: transparent;
+    transition: all 0.2s;
+}
+
+.theme-btn.active {
+    border-color: var(--accent);
+}
+
+.theme-preview {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+}
+
+.theme-preview.dark {
+    background: #1a1a1a;
+}
+
+.theme-preview.sepia {
+    background: #f4ecd8;
+}
+
+.theme-preview.light {
+    background: #ffffff;
+}
+
+/* Toast */
+.toast {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    box-shadow: 0 4px 20px var(--shadow);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 2000;
+    max-width: 90%;
+    text-align: center;
+}
+
+.toast.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.toast.success {
+    background: #1a4d2e;
+    color: #a3e4bc;
+}
+
+.toast.error {
+    background: #4d1a1a;
+    color: #e4a3a3;
+}
+
+/* Loading Overlay */
+.loading {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+    gap: 16px;
+}
+
+.loading.active {
+    display: flex;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading p {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* Settings Overlay */
+.settings-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+    z-index: 999;
+}
+
+.settings-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Safe Area Handling for iPhone */
+@supports (padding: max(0px)) {
+    .reader-header {
+        padding-top: max(12px, env(safe-area-inset-top));
+    }
+
+    .reader-footer {
+        padding-bottom: max(12px, env(safe-area-inset-bottom));
+    }
+
+    #upload-screen {
+        padding-top: max(24px, env(safe-area-inset-top));
+        padding-bottom: max(24px, env(safe-area-inset-bottom));
+    }
+}
+
+/* Tap Highlight */
+.reader-content p.tapped {
+    background: var(--highlight);
+    border-color: var(--highlight-border);
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+    .modal-content {
+        position: absolute;
+        bottom: auto;
+        top: 50%;
+        left: 50%;
+        right: auto;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 500px;
+        border-radius: 20px;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+    }
+
+    .settings-panel {
+        max-width: 360px;
+    }
+}
+
+/* docx-preview overrides for theme support */
+.docx-wrapper-wrapper,
+.docx-wrapper,
+.docx-wrapper > section,
+.docx-wrapper > section.docx,
+.docx-wrapper article,
+.docx-wrapper > article {
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    position: relative;
+    z-index: 1;
+}
+
+.docx-wrapper > section.docx,
+.docx-wrapper > section {
+    padding: 0 !important;
+    margin-bottom: 2em;
+    width: 100% !important;
+    min-width: unset !important;
+    max-width: 100% !important;
+}
+
+/* Scale content based on user font size preference */
+/* Using transform instead of zoom for better mobile performance */
+.docx-wrapper {
+    transform: scale(var(--reader-scale, 1));
+    transform-origin: top left;
+    width: calc(100% / var(--reader-scale, 1));
+}
+
+/* Apply theme colors to rendered document text */
+.reader-content .docx-wrapper,
+.reader-content .docx-wrapper *:not(a) {
+    color: var(--reader-text) !important;
+}
+
+/* Override ALL background colors in docx content */
+.reader-content .docx-wrapper *,
+.reader-content .docx-wrapper section,
+.reader-content .docx-wrapper article,
+.reader-content .docx-wrapper div,
+.reader-content .docx-wrapper p,
+.reader-content .docx-wrapper span {
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Normal paragraph spacing */
+.reader-content .docx-wrapper p {
+    margin-top: 0 !important;
+    margin-bottom: 0.5em !important;
+}
+
+/* Remove extra spacing on scene setting markers */
+.reader-content .docx-wrapper p.docx-wrapper_setting,
+.reader-content .docx-wrapper .docx-wrapper_setting {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Preserve relative font sizes but adapt colors */
+.reader-content .docx-wrapper span[style*="font-size"] {
+    /* Font sizes are preserved from the document */
+}
+
+/* Make sure links are visible */
+.reader-content .docx-wrapper a {
+    color: var(--accent) !important;
+}
+
+/* Ensure images display properly */
+.reader-content .docx-wrapper img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Selection styling */
+::selection {
+    background: var(--accent);
+    color: #fff;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
