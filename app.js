@@ -183,15 +183,11 @@
                 elements.featuredName.textContent = CONFIG.featuredManuscript.displayName;
                 elements.featuredAuthor.textContent = CONFIG.featuredManuscript.author;
 
-                // Get last modified date
+                // Get last modified date and show relative time
                 const lastModified = response.headers.get('Last-Modified');
                 if (lastModified) {
                     const date = new Date(lastModified);
-                    elements.featuredDate.textContent = date.toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric'
-                    });
+                    elements.featuredDate.textContent = getRelativeTime(date);
                 }
 
                 elements.featuredBtn.style.display = 'flex';
@@ -957,6 +953,22 @@
     function truncateText(text, maxLength) {
         if (text.length <= maxLength) return text;
         return text.substring(0, maxLength).trim() + '...';
+    }
+
+    function getRelativeTime(date) {
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+
+        if (diffMins < 1) return 'just now';
+        if (diffMins < 60) return `${diffMins} min${diffMins === 1 ? '' : 's'} ago`;
+        if (diffHours < 24) return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
+        if (diffDays < 30) return `${diffDays} day${diffDays === 1 ? '' : 's'} ago`;
+
+        // Fall back to date for older updates
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     }
 
     // Keyboard handling
