@@ -80,7 +80,7 @@
     // Configuration
     const CONFIG = {
         emailJS: {
-            serviceId: 'service_43jb6qi',
+            serviceId: 'service_s5h81vc',
             templateId: 'template_hg798mf',
             publicKey: 'spdM7Hl7V-jXXbAMn'
         },
