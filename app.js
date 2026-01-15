@@ -255,32 +255,15 @@
                 const serverLastModified = response.headers.get('Last-Modified');
 
                 if (serverLastModified && state.lastModified && serverLastModified !== state.lastModified) {
-                    // New version available - reload while preserving position
-                    const key = `manuscript-position-${state.currentDocument.name}`;
-                    const savedPosition = localStorage.getItem(key);
+                    // New version available - save current position immediately before reload
+                    savePositionImmediately();
 
                     showToast('Updating manuscript...', 'success');
                     const success = await loadFeaturedManuscript(true);
 
                     if (success) {
-                        // Restore reading position after update
-                        if (savedPosition) {
-                            setTimeout(() => {
-                                try {
-                                    const { progress } = JSON.parse(savedPosition);
-                                    if (progress > 0) {
-                                        const scrollHeight = Math.max(
-                                            document.documentElement.scrollHeight,
-                                            document.body.scrollHeight
-                                        ) - window.innerHeight;
-                                        if (scrollHeight > 0) {
-                                            window.scrollTo(0, (progress / 100) * scrollHeight);
-                                        }
-                                    }
-                                } catch (e) {}
-                            }, 500);
-                        }
                         showToast('Manuscript updated!', 'success');
+                        // Position will be restored by displayDocument -> restoreReadingPosition
                     }
                 }
             }
@@ -940,23 +923,26 @@
             try {
                 const { progress } = JSON.parse(saved);
                 if (progress > 0) {
-                    // Wait for docx-preview to fully render, then scroll
-                    setTimeout(() => {
-                        const scrollHeight = Math.max(
-                            document.documentElement.scrollHeight,
-                            document.body.scrollHeight
-                        ) - window.innerHeight;
+                    // Wait for document to fully render, then scroll
+                    // Use requestAnimationFrame + timeout for more reliable timing
+                    requestAnimationFrame(() => {
+                        setTimeout(() => {
+                            const scrollHeight = Math.max(
+                                document.documentElement.scrollHeight,
+                                document.body.scrollHeight
+                            ) - window.innerHeight;
 
-                        if (scrollHeight > 0) {
-                            const targetScroll = (progress / 100) * scrollHeight;
-                            window.scrollTo(0, targetScroll);
-                            // Update progress bars
-                            elements.progressBar.style.width = `${progress}%`;
-                            elements.progressText.textContent = `${Math.round(progress)}%`;
-                            elements.headerProgressBar.style.setProperty('--progress', `${progress}%`);
-                            elements.headerProgressText.textContent = `${Math.round(progress)}%`;
-                        }
-                    }, 500);
+                            if (scrollHeight > 0) {
+                                const targetScroll = (progress / 100) * scrollHeight;
+                                window.scrollTo(0, targetScroll);
+                                // Update progress bars
+                                elements.progressBar.style.width = `${progress}%`;
+                                elements.progressText.textContent = `${Math.round(progress)}%`;
+                                elements.headerProgressBar.style.setProperty('--progress', `${progress}%`);
+                                elements.headerProgressText.textContent = `${Math.round(progress)}%`;
+                            }
+                        }, 800);
+                    });
                 }
             } catch (e) {
                 console.error('Error restoring position:', e);
