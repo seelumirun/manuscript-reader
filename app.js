@@ -30,7 +30,7 @@
     }
 
     // Save document to IndexedDB
-    function saveDocumentToDB(name, arrayBuffer) {
+    function saveDocumentToDB(name, arrayBuffer, lastModified) {
         return new Promise((resolve, reject) => {
             if (!db) return reject(new Error('DB not initialized'));
 
@@ -41,6 +41,7 @@
                 id: 'currentDocument',
                 name: name,
                 arrayBuffer: arrayBuffer,
+                lastModified: lastModified || null,
                 savedAt: Date.now()
             });
 
@@ -131,7 +132,8 @@
         comments: [],
         savePositionTimeout: null,
         lastScrollTop: 0,
-        headerHidden: false
+        headerHidden: false,
+        lastModified: null
     };
 
     // Initialize
@@ -154,12 +156,15 @@
                         name: savedDoc.name,
                         arrayBuffer: savedDoc.arrayBuffer
                     };
+                    state.lastModified = savedDoc.lastModified || null;
 
                     showLoading(true);
                     try {
                         await displayDocument();
                         showScreen('reader');
                         showToast('Restored your last document', 'success');
+                        // Check for updates after restoring
+                        checkForUpdates();
                     } catch (error) {
                         console.error('Error restoring document:', error);
                         state.currentDocument = null;
@@ -192,34 +197,84 @@
     }
 
     // Load the featured manuscript
-    async function loadFeaturedManuscript() {
+    async function loadFeaturedManuscript(silent = false) {
         try {
-            showLoading(true);
+            if (!silent) showLoading(true);
             const response = await fetch(CONFIG.featuredManuscript.filename);
             if (response.ok) {
+                const lastModified = response.headers.get('Last-Modified');
                 const arrayBuffer = await response.arrayBuffer();
+
                 state.currentDocument = {
                     name: CONFIG.featuredManuscript.displayName,
                     arrayBuffer: arrayBuffer
                 };
+                state.lastModified = lastModified;
 
                 // Save to IndexedDB
                 try {
-                    await saveDocumentToDB(state.currentDocument.name, arrayBuffer);
+                    await saveDocumentToDB(state.currentDocument.name, arrayBuffer, lastModified);
                 } catch (e) {
                     console.error('Failed to save document to DB:', e);
                 }
 
                 await displayDocument();
-                showScreen('reader');
+                if (!silent) showScreen('reader');
+                return true;
             } else {
-                showToast('Failed to load manuscript', 'error');
+                if (!silent) showToast('Failed to load manuscript', 'error');
+                return false;
             }
         } catch (error) {
             console.error('Error loading featured manuscript:', error);
-            showToast('Failed to load manuscript', 'error');
+            if (!silent) showToast('Failed to load manuscript', 'error');
+            return false;
         } finally {
-            showLoading(false);
+            if (!silent) showLoading(false);
+        }
+    }
+
+    // Check for manuscript updates
+    async function checkForUpdates() {
+        if (!state.currentDocument) return;
+
+        try {
+            const response = await fetch(CONFIG.featuredManuscript.filename, { method: 'HEAD' });
+            if (response.ok) {
+                const serverLastModified = response.headers.get('Last-Modified');
+
+                if (serverLastModified && state.lastModified && serverLastModified !== state.lastModified) {
+                    // New version available - reload while preserving position
+                    const key = `manuscript-position-${state.currentDocument.name}`;
+                    const savedPosition = localStorage.getItem(key);
+
+                    showToast('Updating manuscript...', 'success');
+                    const success = await loadFeaturedManuscript(true);
+
+                    if (success) {
+                        // Restore reading position after update
+                        if (savedPosition) {
+                            setTimeout(() => {
+                                try {
+                                    const { progress } = JSON.parse(savedPosition);
+                                    if (progress > 0) {
+                                        const scrollHeight = Math.max(
+                                            document.documentElement.scrollHeight,
+                                            document.body.scrollHeight
+                                        ) - window.innerHeight;
+                                        if (scrollHeight > 0) {
+                                            window.scrollTo(0, (progress / 100) * scrollHeight);
+                                        }
+                                    }
+                                } catch (e) {}
+                            }, 500);
+                        }
+                        showToast('Manuscript updated!', 'success');
+                    }
+                }
+            }
+        } catch (error) {
+            console.log('Could not check for updates');
         }
     }
 
@@ -289,6 +344,9 @@
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'hidden') {
                 savePositionImmediately();
+            } else if (document.visibilityState === 'visible') {
+                // Check for updates when app comes back to foreground
+                checkForUpdates();
             }
         });
     }
