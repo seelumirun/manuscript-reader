@@ -288,7 +288,7 @@
     // Bind all event listeners
     function bindEvents() {
         // Read Now button
-        elements.featuredBtn.addEventListener('click', loadFeaturedManuscript);
+        elements.featuredBtn.addEventListener('click', () => loadFeaturedManuscript());
 
         // Navigation
         elements.backBtn.addEventListener('click', goBack);
