@@ -182,7 +182,11 @@
     // Check if featured manuscript exists and get last updated date
     async function checkFeaturedManuscript() {
         try {
-            const response = await fetch(CONFIG.featuredManuscript.filename, { method: 'HEAD' });
+            const cacheBuster = `?_=${Date.now()}`;
+            const response = await fetch(CONFIG.featuredManuscript.filename + cacheBuster, {
+                method: 'HEAD',
+                cache: 'no-store'
+            });
             if (response.ok) {
                 // Get last modified date and show relative time
                 const lastModified = response.headers.get('Last-Modified');
@@ -200,7 +204,11 @@
     async function loadFeaturedManuscript(silent = false) {
         try {
             if (!silent) showLoading(true);
-            const response = await fetch(CONFIG.featuredManuscript.filename);
+            // Add cache-busting to ensure fresh file
+            const cacheBuster = `?_=${Date.now()}`;
+            const response = await fetch(CONFIG.featuredManuscript.filename + cacheBuster, {
+                cache: 'no-store'
+            });
             if (response.ok) {
                 const lastModified = response.headers.get('Last-Modified');
                 const arrayBuffer = await response.arrayBuffer();
@@ -239,7 +247,12 @@
         if (!state.currentDocument) return;
 
         try {
-            const response = await fetch(CONFIG.featuredManuscript.filename, { method: 'HEAD' });
+            // Add cache-busting to bypass browser/CDN cache
+            const cacheBuster = `?_=${Date.now()}`;
+            const response = await fetch(CONFIG.featuredManuscript.filename + cacheBuster, {
+                method: 'HEAD',
+                cache: 'no-store'
+            });
             if (response.ok) {
                 const serverLastModified = response.headers.get('Last-Modified');
 
