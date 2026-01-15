@@ -204,10 +204,8 @@
     async function loadFeaturedManuscript(silent = false) {
         try {
             if (!silent) showLoading(true);
-            // Add cache-busting to ensure fresh file
-            const cacheBuster = `?_=${Date.now()}`;
-            const response = await fetch(CONFIG.featuredManuscript.filename + cacheBuster, {
-                cache: 'no-store'
+            const response = await fetch(CONFIG.featuredManuscript.filename, {
+                cache: 'reload'
             });
             if (response.ok) {
                 const lastModified = response.headers.get('Last-Modified');
