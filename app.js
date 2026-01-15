@@ -204,9 +204,7 @@
     async function loadFeaturedManuscript(silent = false) {
         try {
             if (!silent) showLoading(true);
-            const response = await fetch(CONFIG.featuredManuscript.filename, {
-                cache: 'reload'
-            });
+            const response = await fetch(CONFIG.featuredManuscript.filename);
             if (response.ok) {
                 const lastModified = response.headers.get('Last-Modified');
                 const arrayBuffer = await response.arrayBuffer();
