@@ -659,32 +659,23 @@
 
     // Find the nearest chapter/heading before an element
     function findChapterContext(element) {
-        // Get all headings in the document
-        const allHeadings = Array.from(
-            elements.readerContent.querySelectorAll('h1, h2, h3, h4, h5, h6, p')
+        // Get all elements in reading order
+        const allElements = Array.from(
+            elements.readerContent.querySelectorAll('p, h1, h2, h3, h4, h5, h6')
         );
 
         // Find the element's position
-        const elementIndex = allHeadings.indexOf(element);
-        if (elementIndex === -1) {
-            // Element not in list, search by position
-            const allElements = Array.from(elements.readerContent.querySelectorAll('p, h1, h2, h3, h4, h5, h6'));
-            const idx = allElements.indexOf(element);
-            if (idx === -1) return null;
+        const idx = allElements.indexOf(element);
+        if (idx === -1) return null;
 
-            // Look backwards for a heading
-            for (let i = idx - 1; i >= 0; i--) {
-                const el = allElements[i];
-                if (el.tagName.match(/^H[1-6]$/)) {
-                    return el.textContent.trim();
-                }
+        // Look backwards for a chapter marker or heading
+        for (let i = idx - 1; i >= 0; i--) {
+            const el = allElements[i];
+            // Check for chapter-number class (from mammoth styleMap)
+            if (el.classList.contains('chapter-number')) {
+                return `Chapter ${el.textContent.trim()}`;
             }
-            return null;
-        }
-
-        // Look backwards for a heading
-        for (let i = elementIndex - 1; i >= 0; i--) {
-            const el = allHeadings[i];
+            // Also check for actual heading tags
             if (el.tagName.match(/^H[1-6]$/)) {
                 return el.textContent.trim();
             }
