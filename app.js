@@ -432,7 +432,12 @@
                     "p[style-name='Subtitle'] => h2.subtitle:fresh",
                     "p[style-name='Chapter No.'] => p.chapter-number:fresh",
                     "p[style-name='Setting'] => p.scene-setting:fresh",
-                    "p[style-name='POV Title'] => p.pov-label:fresh"
+                    "p[style-name='POV Title'] => p.pov-label:fresh",
+                    "p[style-name='BlockQuote'] => blockquote:fresh",
+                    // These character styles carry italics via the style itself (no direct
+                    // italic run property), so mammoth drops them to plain text unless mapped.
+                    "r[style-name='Body copy italics'] => em",
+                    "r[style-name='Emphasis'] => em"
                 ]
             }
         );
@@ -510,6 +515,13 @@
         });
     }
 
+    // Format a chapter heading for display. Titles in the manuscript now read
+    // "Chapter 1" etc., so use them as-is; only bare numbers get a "Chapter" prefix.
+    function chapterLabel(text) {
+        const t = text.trim();
+        return /^\d{1,3}$/.test(t) ? `Chapter ${t}` : t;
+    }
+
     // Build table of contents from chapter markers
     function buildTableOfContents(wrapper) {
         const chapters = wrapper.querySelectorAll('.chapter-number');
@@ -527,7 +539,7 @@
 
             const tocItem = document.createElement('button');
             tocItem.className = 'toc-item';
-            tocItem.textContent = `Chapter ${chapter.textContent.trim()}`;
+            tocItem.textContent = chapterLabel(chapter.textContent);
             tocItem.addEventListener('click', () => {
                 // Scroll to chapter
                 chapter.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -673,7 +685,7 @@
             const el = allElements[i];
             // Check for chapter-number class (from mammoth styleMap)
             if (el.classList.contains('chapter-number')) {
-                return `Chapter ${el.textContent.trim()}`;
+                return chapterLabel(el.textContent);
             }
             // Also check for actual heading tags
             if (el.tagName.match(/^H[1-6]$/)) {

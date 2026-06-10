@@ -356,10 +356,10 @@ body {
 
 /* Chapter numbers */
 .manuscript-content .chapter-number {
-    font-family: 'Inter', -apple-system, sans-serif;
-    font-size: 4em;
+    font-family: 'Merriweather', Georgia, serif;
+    font-size: 2em;
     font-weight: 300;
-    text-align: right;
+    text-align: center;
     margin-top: 1.5em;
     margin-bottom: 0.5em;
     color: var(--text-primary);
@@ -398,7 +398,7 @@ body {
     margin-top: 2em;
     margin-bottom: 1em;
     color: var(--text-primary);
-    text-align: left;
+    text-align: center;
     -webkit-text-stroke: 1px var(--text-primary);
 }
 
