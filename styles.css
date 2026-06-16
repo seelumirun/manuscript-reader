@@ -88,22 +88,10 @@ body {
     justify-content: center;
     align-items: center;
     padding: 24px;
-    background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    background: linear-gradient(180deg, #2e2e2e 0%, #000000 100%);
     position: relative;
     min-height: 100vh;
     min-height: 100dvh;
-}
-
-#upload-screen::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: url('cover-bg.png');
-    background-size: cover;
-    background-position: center;
-    opacity: 0.1;
-    pointer-events: none;
-    z-index: 0;
 }
 
 .upload-container {
@@ -162,9 +150,10 @@ body {
 
 /* Last updated text */
 .last-updated {
+    display: block;
     font-size: 14px;
     color: var(--text-muted);
-    margin-bottom: 32px;
+    margin-top: 8px;
 }
 
 .last-updated span {
